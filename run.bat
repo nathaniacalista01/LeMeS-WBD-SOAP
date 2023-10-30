@@ -1,0 +1,1 @@
+java --illegal-access=warn --add-opens java.base/java.lang=ALL-UNNAMED -cp target/tugas-besar-2-SOAP-jar-with-dependencies.jar com.LMS.Main
