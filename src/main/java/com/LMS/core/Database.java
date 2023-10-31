@@ -5,18 +5,25 @@ import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Database {
     private static  Database instance;
     private  Connection conn;
     private Dotenv dotenv = Dotenv.load();
     private String MYSQL_URL = dotenv.get("MYSQL_URL");
-    private  String MYSQL_USER = dotenv.get("MYSQl_USER");
+    private  String MYSQL_USER = dotenv.get("MYSQL_USER");
     private String MYSQL_PASSWORD = dotenv.get("MYSQL_PASSWORD");
 
     public Database(){
         try{
-            Connection conn = DriverManager.getConnection(MYSQL_URL,"root",MYSQL_PASSWORD);
+            String table = "CREATE TABLE IF NOT EXISTS subscriptions (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT, " +
+                    "status ENUM('WAITING', 'ACCEPTED', 'REJECTED'))";
+            Connection conn = DriverManager.getConnection(MYSQL_URL,MYSQL_USER,MYSQL_PASSWORD);
+            Statement stmt = conn.createStatement();
+            stmt.execute(table);
         }catch (Exception e){
             e.printStackTrace();
             System.out.println("Error connecting to database");
