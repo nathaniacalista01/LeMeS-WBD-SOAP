@@ -51,4 +51,24 @@ public class Subsciption {
             return "Request failed";
         }
     }
+
+    @WebMethod
+    public String updateSubscription(@WebParam(name = "user_id")int user_id, @WebParam(name="newStatus") String newStatus){
+        try {
+            Database db = new Database();
+            Connection conn = db.getConnection();
+            Statement stmt = conn.createStatement();
+            String query = "UPDATE subscriptions  SET status = '" + newStatus + "' WHERE user_id = " + user_id;
+
+            int rows = stmt.executeUpdate(query);
+            System.out.println(rows);
+            if(rows == 0){
+                return "User doesn't exists";
+            }
+            return "Succesfully updated subscriptionts status!";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "Update failed";
+        }
+    }
 }
