@@ -1,18 +1,18 @@
 version: "3.9"
 services:
   mysql:
-    container_name: db-soapservice
+    container_name: soap_db
     image: mysql:latest
     ports:
       - "3306:3306"
     env_file: .env
     hostname: db-soap-service
     volumes:
-      - ./db:/var/lib/mysql
+      - ./mysql:/var/lib/mysql
     networks:
       - soap-services
 
 volumes:
-  db:
+  mysql:
 networks:
   soap-services:
