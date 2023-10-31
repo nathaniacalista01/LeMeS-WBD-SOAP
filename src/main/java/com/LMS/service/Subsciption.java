@@ -6,6 +6,7 @@ import com.mysql.cj.protocol.Resultset;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.swing.plaf.nimbus.State;
 import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -36,4 +37,18 @@ public class Subsciption {
         return false;
     }
 
+    @WebMethod
+    public String subscribe(@WebParam(name = "user_id") int user_id){
+        try{
+            Database db =Database.getInstance();
+            Connection conn = db.getConnection();
+            Statement stmt = conn.createStatement();
+            String query = "INSERT INTO subscriptions(user_id,status) VALUES(" + user_id + ",'WAITING')";
+            stmt.executeUpdate(query);
+            return "Successfully request for premium status";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "Request failed";
+        }
+    }
 }
