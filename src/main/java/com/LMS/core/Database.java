@@ -15,7 +15,7 @@ public class Database {
     private  String MYSQL_USER = dotenv.get("MYSQL_USER");
     private String MYSQL_PASSWORD = dotenv.get("MYSQL_PASSWORD");
 
-    public Database(){
+    private Database(){
         try{
             String table = "CREATE TABLE IF NOT EXISTS subscriptions (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +

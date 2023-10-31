@@ -55,7 +55,7 @@ public class Subsciption {
     @WebMethod
     public String updateSubscription(@WebParam(name = "user_id")int user_id, @WebParam(name="newStatus") String newStatus){
         try {
-            Database db = new Database();
+            Database db = Database.getInstance();
             Connection conn = db.getConnection();
             Statement stmt = conn.createStatement();
             String query = "UPDATE subscriptions  SET status = '" + newStatus + "' WHERE user_id = " + user_id;
@@ -71,4 +71,23 @@ public class Subsciption {
             return "Update failed";
         }
     }
+
+    @WebMethod
+    public String deleteSubscription(@WebParam(name = "user_id") int user_id){
+        try{
+            Database db = Database.getInstance();
+            Connection conn = db.getConnection();
+            Statement stmt = conn.createStatement();
+            String query = "DELETE FROM subscriptions WHERE user_id = " + user_id;
+            int row = stmt.executeUpdate(query);
+            if(row == 0){
+                return "User doesn't exist";
+            }
+            return "User has been successfully deleted!";
+        }catch(Exception e){
+            return  "Delete failed!";
+        }
+    }
+
+
 }
