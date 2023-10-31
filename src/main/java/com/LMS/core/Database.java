@@ -21,7 +21,7 @@ public class Database {
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "user_id INT, " +
                     "status ENUM('WAITING', 'ACCEPTED', 'REJECTED'))";
-            Connection conn = DriverManager.getConnection(MYSQL_URL,MYSQL_USER,MYSQL_PASSWORD);
+            this.conn = DriverManager.getConnection(MYSQL_URL,MYSQL_USER,MYSQL_PASSWORD);
             Statement stmt = conn.createStatement();
             stmt.execute(table);
         }catch (Exception e){
