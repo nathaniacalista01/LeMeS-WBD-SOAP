@@ -1,18 +1,31 @@
 version: "3.9"
 services:
-  mysql:
+  soap:
+    container_name: soap
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    networks:
+      - soap-services
+    depends_on:
+      - mysql-server
+  mysql-server:
     container_name: soap_db
     image: mysql:latest
     ports:
       - "3306:3306"
-    env_file: .env
-    hostname: db-soap-service
+    env_file:
+      - .env
     volumes:
       - ./mysql:/var/lib/mysql
     networks:
       - soap-services
 
-volumes:
-  mysql:
 networks:
   soap-services:
+php-network:
+
