@@ -27,5 +27,4 @@ services:
 
 networks:
   soap-services:
-php-network:
 

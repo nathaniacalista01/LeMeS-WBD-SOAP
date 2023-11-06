@@ -16,21 +16,30 @@ public class Database {
     private String MYSQL_PASSWORD = dotenv.get("MYSQL_PASSWORD");
 
     private Database(){
-        try{
-            Thread.sleep(10000);
-            System.out.println(MYSQL_URL + MYSQL_USER + MYSQL_PASSWORD);
-            String table = "CREATE TABLE IF NOT EXISTS subscriptions (" +
-                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
-                    "user_id INT, " +
-                    "status ENUM('WAITING', 'ACCEPTED', 'REJECTED'))";
-            this.conn = DriverManager.getConnection(MYSQL_URL,MYSQL_USER,MYSQL_PASSWORD);
+        int restart = 0;
+        boolean connected = false;
+        while(!connected){
+            if(restart == 5){
+                break;
+            }
+            try{
+                Thread.sleep(5000);
+                System.out.println(MYSQL_URL + MYSQL_USER + MYSQL_PASSWORD);
+                String table = "CREATE TABLE IF NOT EXISTS premium_accounts (" +
+                        "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                        "user_id INT, " +
+                        "status ENUM('WAITING', 'ACCEPTED', 'REJECTED'))";
+                this.conn = DriverManager.getConnection(MYSQL_URL,MYSQL_USER,MYSQL_PASSWORD);
 
-            Statement stmt = conn.createStatement();
-            stmt.execute(table);
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println("Error connecting to database");
+                Statement stmt = conn.createStatement();
+                stmt.execute(table);
+                connected = true;
+            }catch (Exception e){
+                System.out.println("Error connecting to database");
+                restart+=1;
+            }
         }
+
     }
 
     public Connection getConnection(){
