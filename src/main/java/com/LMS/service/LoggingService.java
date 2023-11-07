@@ -1,6 +1,7 @@
 package com.LMS.service;
 
 import com.LMS.core.Database;
+import com.LMS.models.Logging;
 import com.LMS.repository.LoggingRepository;
 
 import javax.xml.crypto.Data;
@@ -17,8 +18,8 @@ public class LoggingService {
 
     }
 
-    public void add(String desc, String ip, String endpoint){
-        this.loggingRepository.add(desc,ip,endpoint);
+    public void add(Logging log){
+        this.loggingRepository.add(log);
     }
 
 

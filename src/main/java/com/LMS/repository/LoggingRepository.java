@@ -1,5 +1,7 @@
 package com.LMS.repository;
 
+import com.LMS.models.Logging;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -8,8 +10,11 @@ public class LoggingRepository extends Repository {
         super();
     }
 
-    public void add(String desc, String ip, String endpoint){
+    public void add(Logging log){
         String query = "INSERT INTO logging(descriptions, IP, endpoint) VALUES (?, ?, ?)";
+        String desc = log.getDescription();
+        String ip = log.getIp();
+        String endpoint = log.getEndpoint();
         try{
             PreparedStatement prep = this.conn.prepareStatement(query);
             prep.setString(1,desc);
