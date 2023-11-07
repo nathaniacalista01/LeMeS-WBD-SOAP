@@ -49,21 +49,6 @@ public class Premium {
         return false;
     }
     @WebMethod
-    public boolean hasRequested(@WebParam(name = "user_id") int user_id){
-        try{
-            String query = "SELECT * FROM premium_accounts WHERE user_id = " + user_id + " AND ( status ='WAITING' or status = 'ACCEPTED')";
-            ResultSet result = this.stmt.executeQuery(query);
-            if(result.next()){
-                return true;
-            }else{
-                return false;
-            }
-        }catch (SQLException e){
-            System.out.println("Error query");
-            return false;
-        }
-    }
-    @WebMethod
     public String upgrade(@WebParam(name = "user_id") int user_id){
         try{
             String query = "INSERT INTO premium_accounts(user_id,status) VALUES(" + user_id + ",'WAITING')";
@@ -102,6 +87,22 @@ public class Premium {
             return "User has been successfully deleted!";
         }catch(Exception e){
             return  "Delete failed!";
+        }
+    }
+
+    @WebMethod
+
+    public String getPremiumStatus(@WebParam(name = "user_id") int user_id){
+        try{
+            String query = "SELECT status FROM premium_accounts WHERE user_id = " + user_id;
+            ResultSet result = this.stmt.executeQuery(query);
+            if(result.next()){
+                return result.getString("status");
+            }else{
+                return "NOT PREMIUM";
+            }
+        }catch(SQLException e){
+            return "Error";
         }
     }
 
