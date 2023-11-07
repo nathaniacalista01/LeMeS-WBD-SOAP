@@ -1,11 +1,20 @@
 package com.LMS.service;
 
 import com.LMS.core.Database;
+import com.sun.net.httpserver.HttpExchange;
 
+import javax.annotation.Resource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import javax.swing.plaf.nimbus.State;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,12 +25,16 @@ public class Premium {
     Database db;
     Connection conn;
     Statement stmt;
+    LoggingService ls;
+    @Resource
+    public WebServiceContext ws;
 
     public Premium(){
         try {
             this.db = Database.getInstance();
             this.conn = db.getConnection();
             this.stmt = this.conn.createStatement();
+            this.ls = new LoggingService();
         }catch (SQLException e){
             System.out.println("Error");
         }
@@ -33,6 +46,14 @@ public class Premium {
 
     @WebMethod
     public boolean isPremium(@WebParam(name="user_id") int user_id){
+        MessageContext mc = this.ws.getMessageContext();
+        HttpExchange exchange = (HttpExchange)mc.get("com.sun.xml.ws.http.exchange");
+        InetSocketAddress remoteAddress = exchange.getRemoteAddress();
+        InetAddress inetAddress = remoteAddress.getAddress();
+        String ip = remoteAddress.getAddress().getHostAddress();
+        String description = "User with id " + Integer.toString(user_id) + " has called isPremium";
+        String endpoint = "isPremium";
+        ls.add(description,ip,endpoint);
         try{
             Database db = Database.getInstance();
             Connection conn = db.getConnection();
