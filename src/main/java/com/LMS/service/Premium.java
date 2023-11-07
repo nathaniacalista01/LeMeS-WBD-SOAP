@@ -5,12 +5,27 @@ import com.LMS.core.Database;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 @WebService
 public class Premium {
+    Database db;
+    Connection conn;
+    Statement stmt;
+
+    public Premium(){
+        try {
+            this.db = Database.getInstance();
+            this.conn = db.getConnection();
+            this.stmt = this.conn.createStatement();
+        }catch (SQLException e){
+            System.out.println("Error");
+        }
+    }
     @WebMethod
     public String testing(@WebParam(name="param1") String a){
         return a + "testing";
@@ -33,15 +48,26 @@ public class Premium {
         }
         return false;
     }
-
+    @WebMethod
+    public boolean hasRequested(@WebParam(name = "user_id") int user_id){
+        try{
+            String query = "SELECT * FROM premium_accounts WHERE user_id = " + user_id + " AND ( status ='WAITING' or status = 'ACCEPTED')";
+            ResultSet result = this.stmt.executeQuery(query);
+            if(result.next()){
+                return true;
+            }else{
+                return false;
+            }
+        }catch (SQLException e){
+            System.out.println("Error query");
+            return false;
+        }
+    }
     @WebMethod
     public String upgrade(@WebParam(name = "user_id") int user_id){
         try{
-            Database db =Database.getInstance();
-            Connection conn = db.getConnection();
-            Statement stmt = conn.createStatement();
             String query = "INSERT INTO premium_accounts(user_id,status) VALUES(" + user_id + ",'WAITING')";
-            stmt.executeUpdate(query);
+            this.stmt.executeUpdate(query);
             return "Successfully request for premium status";
         }catch (Exception e){
             e.printStackTrace();
@@ -52,12 +78,8 @@ public class Premium {
     @WebMethod
     public String updatePremiumStatus(@WebParam(name = "user_id")int user_id, @WebParam(name="newStatus") String newStatus){
         try {
-            Database db = Database.getInstance();
-            Connection conn = db.getConnection();
-            Statement stmt = conn.createStatement();
             String query = "UPDATE premium_accounts  SET status = '" + newStatus + "' WHERE user_id = " + user_id;
-
-            int rows = stmt.executeUpdate(query);
+            int rows = this.stmt.executeUpdate(query);
             System.out.println(rows);
             if(rows == 0){
                 return "User doesn't exists";
@@ -72,11 +94,8 @@ public class Premium {
     @WebMethod
     public String deleteRequest(@WebParam(name = "user_id") int user_id){
         try{
-            Database db = Database.getInstance();
-            Connection conn = db.getConnection();
-            Statement stmt = conn.createStatement();
             String query = "DELETE FROM premium_accounts WHERE user_id = " + user_id;
-            int row = stmt.executeUpdate(query);
+            int row = this.stmt.executeUpdate(query);
             if(row == 0){
                 return "User doesn't exist";
             }

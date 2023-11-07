@@ -24,13 +24,11 @@ public class Database {
             }
             try{
                 Thread.sleep(5000);
-                System.out.println(MYSQL_URL + MYSQL_USER + MYSQL_PASSWORD);
                 String table = "CREATE TABLE IF NOT EXISTS premium_accounts (" +
                         "id INT AUTO_INCREMENT PRIMARY KEY, " +
                         "user_id INT, " +
                         "status ENUM('WAITING', 'ACCEPTED', 'REJECTED'))";
                 this.conn = DriverManager.getConnection(MYSQL_URL,MYSQL_USER,MYSQL_PASSWORD);
-
                 Statement stmt = conn.createStatement();
                 stmt.execute(table);
                 connected = true;
