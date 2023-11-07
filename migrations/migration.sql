@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS premium_accounts(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    username VARCHAR(255),
+    status ENUM('WAITING','ACCEPTED','REJECTED')
+);
+
+CREATE TABLE IF NOT EXISTS logging(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    descriptions VARCHAR(255),
+    IP VARCHAR(255),
+    endpoint VARCHAR(255),
+    accessed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

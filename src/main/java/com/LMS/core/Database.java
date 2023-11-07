@@ -19,18 +19,18 @@ public class Database {
         int restart = 0;
         boolean connected = false;
         while(!connected){
-            if(restart == 5){
+            if(restart == 10){
                 break;
             }
             try{
                 Thread.sleep(5000);
-                String table = "CREATE TABLE IF NOT EXISTS premium_accounts (" +
+                String tablePremium = "CREATE TABLE IF NOT EXISTS premium_accounts (" +
                         "id INT AUTO_INCREMENT PRIMARY KEY, " +
                         "user_id INT, " +
                         "status ENUM('WAITING', 'ACCEPTED', 'REJECTED'))";
                 this.conn = DriverManager.getConnection(MYSQL_URL,MYSQL_USER,MYSQL_PASSWORD);
                 Statement stmt = conn.createStatement();
-                stmt.execute(table);
+//                stmt.execute(tablePremium);
                 connected = true;
             }catch (Exception e){
                 System.out.println("Error connecting to database");
