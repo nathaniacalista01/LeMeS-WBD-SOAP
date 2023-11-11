@@ -63,5 +63,21 @@ public class PremiumService {
         return premiumRepository.getAllPremium();
     }
 
+    @WebMethod
+    public String filterPremiumAccount(@WebParam(name = "filter") String filter){
+        return premiumRepository.filterPremiumAccount(filter);
+    }
+
+    @WebMethod
+    public String searchPremium(@WebParam(name = "username") String username){
+        return premiumRepository.searchPremium(username);
+    }
+
+    @WebMethod
+    public String searchAndFilterPremium(@WebParam(name = "username") String username, @WebParam(name = "status") String status){
+        return premiumRepository.searchAndFilterPremium(username,status);
+    }
+
+
 
 }

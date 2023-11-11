@@ -1,6 +1,7 @@
 package com.LMS.repository;
 
 import com.LMS.models.Premium;
+import com.LMS.utils.JsonParser;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -12,8 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PremiumRepository extends  Repository{
+    private  JsonParser jp;
     public PremiumRepository(){
+
         super();
+        this.jp = new JsonParser();
     }
 
     public boolean isPremium(int user_id){
@@ -82,9 +86,23 @@ public class PremiumRepository extends  Repository{
     }
 
     public String getAllPremium(){
-        String result = "{ \"data\" : [";
         try{
             String query = "SELECT * FROM premium_accounts";
+            ResultSet rows = this.stmt.executeQuery(query);
+            JsonParser jp = new JsonParser();
+            String result = jp.parse(rows);
+            return result;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return "{ \"data\" : []}";
+        }
+    }
+
+    public String filterPremiumAccount(String filter){
+        String result = "{ \"data\" : [";
+        try{
+            String query = "SELECT * FROM premium_accounts WHERE status = '" + filter + "'";
+            System.out.println(query);
             ResultSet rows = this.stmt.executeQuery(query);
             List<String> premiumList = new ArrayList<String>();
             while (rows.next()) {
@@ -104,7 +122,59 @@ public class PremiumRepository extends  Repository{
         }catch (SQLException e){
             e.printStackTrace();
         }
+        return result;
+    }
 
+    public String searchPremium(String searchQuery){
+        String result = "{ \"data\" : [";
+        try{
+            String query = "SELECT * FROM premium_accounts WHERE username like '%" + searchQuery + "%'";
+            ResultSet rows = this.stmt.executeQuery(query);
+            List<String> premiumList = new ArrayList<String>();
+            while (rows.next()) {
+                int userId = rows.getInt("user_id");
+                String username = rows.getString("username");
+                String status = rows.getString("status");
+
+                // Membangun objek JSON untuk setiap baris hasil
+                String json = String.format("{\"user_id\": %d, \"username\": \"%s\", \"status\": \"%s\"}",
+                        userId, username, status);
+                premiumList.add(json);
+            }
+
+            // Menggabungkan semua objek JSON menjadi satu string
+            result += String.join(",", premiumList);
+            result += "]}";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String searchAndFilterPremium(String username_params, String status_params){
+        String result = "{ \"data\" : [";
+        try{
+            String query = "SELECT * FROM premium_accounts WHERE username like '%" + username_params + "%' AND status = '" + status_params + "'";
+            System.out.println(query);
+            ResultSet rows = this.stmt.executeQuery(query);
+            List<String> premiumList = new ArrayList<String>();
+            while (rows.next()) {
+                int userId = rows.getInt("user_id");
+                String username = rows.getString("username");
+                String status = rows.getString("status");
+
+                // Membangun objek JSON untuk setiap baris hasil
+                String json = String.format("{\"user_id\": %d, \"username\": \"%s\", \"status\": \"%s\"}",
+                        userId, username, status);
+                premiumList.add(json);
+            }
+
+            // Menggabungkan semua objek JSON menjadi satu string
+            result += String.join(",", premiumList);
+            result += "]}";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         return result;
     }
 }
