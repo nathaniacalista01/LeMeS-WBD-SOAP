@@ -36,7 +36,14 @@ public class PremiumService {
     public String updatePremiumStatus(@WebParam(name = "user_id")int user_id, @WebParam(name="newStatus") String newStatus){
 //        Ini nanti klo bisa, tampilin id yang nge ganti si premium status
         LoggingMiddleware middleware = new LoggingMiddleware(ws.getMessageContext(),user_id,"Has requested to update to update " + user_id + "'s status to " + newStatus, "updatePremiumStatus");
-        return premiumRepository.updatePremiumStatus(user_id, newStatus);
+        try{
+            String result = premiumRepository.updatePremiumStatus(user_id, newStatus);
+            return result;
+        }catch (Exception e){
+            System.out.println("Masuk ke error sini");
+            e.printStackTrace();
+            return "Error";
+        }
     }
 
     @WebMethod
@@ -49,6 +56,11 @@ public class PremiumService {
     public String getPremiumStatus(@WebParam(name = "user_id") int user_id){
         LoggingMiddleware middleware = new LoggingMiddleware(ws.getMessageContext(),user_id,"Has requested to see his/her premium's status","getPremiumStatus");
         return premiumRepository.getPremiumStatus(user_id);
+    }
+
+    @WebMethod
+    public String getAllPremium(){
+        return premiumRepository.getAllPremium();
     }
 
 

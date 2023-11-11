@@ -1,7 +1,15 @@
 package com.LMS.repository;
 
+import com.LMS.models.Premium;
+
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.lang.model.type.ArrayType;
+import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PremiumRepository extends  Repository{
     public PremiumRepository(){
@@ -33,7 +41,7 @@ public class PremiumRepository extends  Repository{
         }
     }
 
-    public String updatePremiumStatus(int user_id, String newStatus){
+    public String updatePremiumStatus(int user_id, String newStatus) throws Exception{
         try {
             String query = "UPDATE premium_accounts  SET status = '" + newStatus + "' WHERE user_id = " + user_id;
             int rows = this.stmt.executeUpdate(query);
@@ -43,8 +51,7 @@ public class PremiumRepository extends  Repository{
             }
             return "Succesfully updated premium status!";
         }catch (Exception e){
-            e.printStackTrace();
-            return "Update failed";
+            throw new Exception(e.getMessage());
         }
     }
     public String deleteRequest(int user_id){
@@ -72,5 +79,32 @@ public class PremiumRepository extends  Repository{
         }catch(SQLException e){
             return "Error";
         }
+    }
+
+    public String getAllPremium(){
+        String result = "{ \"data\" : [";
+        try{
+            String query = "SELECT * FROM premium_accounts";
+            ResultSet rows = this.stmt.executeQuery(query);
+            List<String> premiumList = new ArrayList<String>();
+            while (rows.next()) {
+                int userId = rows.getInt("user_id");
+                String username = rows.getString("username");
+                String status = rows.getString("status");
+
+                // Membangun objek JSON untuk setiap baris hasil
+                String json = String.format("{\"user_id\": %d, \"username\": \"%s\", \"status\": \"%s\"}",
+                        userId, username, status);
+                premiumList.add(json);
+            }
+
+            // Menggabungkan semua objek JSON menjadi satu string
+            result += String.join(",", premiumList);
+            result += "]}";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

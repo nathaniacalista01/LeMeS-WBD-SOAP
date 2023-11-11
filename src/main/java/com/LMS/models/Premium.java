@@ -3,9 +3,12 @@ package com.LMS.models;
 public class Premium {
     private String user_id;
     private String status;
-    public Premium(String user_id, String status){
+
+    private String username;
+    public Premium(String user_id, String status, String username){
         this.user_id = user_id;
         this.status = status;
+        this.username = username;
     }
 
     public String getStatus() {
