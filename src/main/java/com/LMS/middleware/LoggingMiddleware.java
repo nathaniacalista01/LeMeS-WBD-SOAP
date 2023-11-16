@@ -14,12 +14,17 @@ public class LoggingMiddleware {
     @Resource
     public WebServiceContext ws;
     private final static LoggingService loggingService = new LoggingService();
-    public LoggingMiddleware(MessageContext mc,int user_id, String action,String endpoint){
+    public LoggingMiddleware(MessageContext mc, String action,String endpoint) throws Exception{
         HttpExchange exchange = (HttpExchange) mc.get("com.sun.xml.ws.http.exchange");
+        ApiMiddleware api = new ApiMiddleware();
+        if(!api.authenticate(exchange)){
+//            Kalau API key tidak valid
+            throw new Exception("API EXCEPTION");
+        }
         InetSocketAddress remoteAddress  = exchange.getRemoteAddress();
         InetAddress inetAddress = remoteAddress.getAddress();
         String ip = inetAddress.getHostAddress();
-        String description = "User with id " + Integer.toString(user_id) + " " + action;
+        String description = "User " + action;
         Logging log = new Logging(description,ip,endpoint);
         loggingService.add(log);
     }
