@@ -34,13 +34,11 @@ public class PremiumService {
 
     @WebMethod
     public String updatePremiumStatus(@WebParam(name = "user_id")int user_id, @WebParam(name="newStatus") String newStatus){
-//        Ini nanti klo bisa, tampilin id yang nge ganti si premium status
         LoggingMiddleware middleware = new LoggingMiddleware(ws.getMessageContext(),user_id,"Has requested to update to update " + user_id + "'s status to " + newStatus, "updatePremiumStatus");
         try{
             String result = premiumRepository.updatePremiumStatus(user_id, newStatus);
             return result;
         }catch (Exception e){
-            System.out.println("Masuk ke error sini");
             e.printStackTrace();
             return "Error";
         }

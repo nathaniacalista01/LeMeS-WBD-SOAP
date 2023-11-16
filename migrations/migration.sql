@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS premium_accounts(
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     username VARCHAR(255),
-    status ENUM('WAITING','ACCEPTED','REJECTED')
+    status ENUM('WAITING','ACCEPTED')
 );
 
 CREATE TABLE IF NOT EXISTS logging(

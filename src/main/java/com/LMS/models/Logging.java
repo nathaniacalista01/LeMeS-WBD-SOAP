@@ -1,7 +1,5 @@
 package com.LMS.models;
 
-import jdk.jpackage.internal.Log;
-
 public class Logging {
     private String description;
     private String ip;

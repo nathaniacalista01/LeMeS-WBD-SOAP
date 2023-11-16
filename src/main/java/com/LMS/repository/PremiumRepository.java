@@ -1,12 +1,7 @@
 package com.LMS.repository;
 
-import com.LMS.models.Premium;
 import com.LMS.utils.JsonParser;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.lang.model.type.ArrayType;
-import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
