@@ -64,8 +64,8 @@ public class PremiumService {
     }
 
     @WebMethod
-    public String filterPremiumAccount(@WebParam(name = "filter") String filter){
-        return premiumRepository.filterPremiumAccount(filter);
+    public String filterPremium(@WebParam(name = "filter") String filter){
+        return premiumRepository.filterPremium(filter);
     }
 
     @WebMethod
@@ -78,6 +78,13 @@ public class PremiumService {
         return premiumRepository.searchAndFilterPremium(username,status);
     }
 
-
+    @WebMethod
+    public String getPremiumPagination(@WebParam(name="page")int page, @WebParam(name ="limit") int limit){
+        return premiumRepository.getPagination(page,limit);
+    }
+    @WebMethod
+    public Integer getTotalPremium(){
+        return premiumRepository.getTotalPremiumAccounts();
+    }
 
 }

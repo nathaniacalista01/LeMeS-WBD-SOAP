@@ -49,11 +49,10 @@ public class PremiumRepository extends  Repository{
         try {
             String query = "UPDATE premium_accounts  SET status = '" + newStatus + "' WHERE user_id = " + user_id;
             int rows = this.stmt.executeUpdate(query);
-            System.out.println(rows);
             if(rows == 0){
-                return "User doesn't exists";
+                return "Not Exists";
             }
-            return "Succesfully updated premium status!";
+            return "Successfully updated premium status!";
         }catch (Exception e){
             throw new Exception(e.getMessage());
         }
@@ -63,11 +62,11 @@ public class PremiumRepository extends  Repository{
             String query = "DELETE FROM premium_accounts WHERE user_id = " + user_id;
             int row = this.stmt.executeUpdate(query);
             if(row == 0){
-                return "User doesn't exist";
+                return "Error";
             }
             return "User has been successfully deleted!";
         }catch(Exception e){
-            return  "Delete failed!";
+            return  "Error";
         }
     }
 
@@ -98,11 +97,10 @@ public class PremiumRepository extends  Repository{
         }
     }
 
-    public String filterPremiumAccount(String filter){
+    public String filterPremium(String filter){
         String result = "{ \"data\" : [";
         try{
             String query = "SELECT * FROM premium_accounts WHERE status = '" + filter + "'";
-            System.out.println(query);
             ResultSet rows = this.stmt.executeQuery(query);
             List<String> premiumList = new ArrayList<String>();
             while (rows.next()) {
@@ -150,12 +148,25 @@ public class PremiumRepository extends  Repository{
         }
         return result;
     }
+    public int getTotalPremiumAccounts(){
+        try {
+            String query = "SELECT COUNT(*) AS total FROM premium_accounts";
+            ResultSet result = this.stmt.executeQuery(query);
+            if (result.next()) {
+                return result.getInt("total");
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
     public String searchAndFilterPremium(String username_params, String status_params){
         String result = "{ \"data\" : [";
         try{
             String query = "SELECT * FROM premium_accounts WHERE username like '%" + username_params + "%' AND status = '" + status_params + "'";
-            System.out.println(query);
             ResultSet rows = this.stmt.executeQuery(query);
             List<String> premiumList = new ArrayList<String>();
             while (rows.next()) {
@@ -173,6 +184,34 @@ public class PremiumRepository extends  Repository{
             result += String.join(",", premiumList);
             result += "]}";
         }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String getPagination(int page, int limit){
+        String result = "{ \"data\" : [";
+        int offset = (page - 1) * limit;
+        System.out.println("Ini offset" + offset);
+        try{
+            String query = "SELECT * FROM premium_accounts LIMIT " + limit + " OFFSET " + offset;
+            ResultSet rows = this.stmt.executeQuery(query);
+            List<String> premiumList = new ArrayList<String>();
+            while (rows.next()) {
+                int userId = rows.getInt("user_id");
+                String username = rows.getString("username");
+                String status = rows.getString("status");
+
+                // Membangun objek JSON untuk setiap baris hasil
+                String json = String.format("{\"user_id\": %d, \"username\": \"%s\", \"status\": \"%s\"}",
+                        userId, username, status);
+                premiumList.add(json);
+            }
+
+            // Menggabungkan semua objek JSON menjadi satu string
+            result += String.join(",", premiumList);
+            result += "]}";
+        }catch(SQLException e){
             e.printStackTrace();
         }
         return result;
