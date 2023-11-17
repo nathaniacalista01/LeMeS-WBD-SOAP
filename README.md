@@ -48,5 +48,3 @@ Semua endpoint berada pada /premium
 2. Security: Logging and Api Key: 13521139
 3. Upgrade Service: 13521139
 4. Middleware : 13521139
-
-#### Proudly Presented by Binosed, 2022
