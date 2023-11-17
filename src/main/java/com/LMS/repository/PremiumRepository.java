@@ -187,7 +187,6 @@ public class PremiumRepository extends  Repository{
     public String getPagination(int page, int limit){
         String result = "{ \"data\" : [";
         int offset = (page - 1) * limit;
-        System.out.println("Ini offset" + offset);
         try{
             String query = "SELECT * FROM premium_accounts LIMIT " + limit + " OFFSET " + offset;
             ResultSet rows = this.stmt.executeQuery(query);

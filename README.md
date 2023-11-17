@@ -13,8 +13,7 @@ LeMeS-soap adalah repositori yang menyediakan service backend untuk aplikasi LeM
 
 ## Skema basis data
 
-![skema](screenshots/20221202104105.png)  
-Basis data terdiri atas dua tabel, logging dan premium_accounts. Tabel logging menyimpan informasi mengenai seluruh request yang dilakukan oleh user ke database SOAP, sedangkan tabel subscription menyimpan informasi mengenai siapa saja pengguna yang sudah melakukan request untuk upgrade ke akun premium_accounts
+![Alt text](image.png)Basis data terdiri atas dua tabel, logging dan premium_accounts. Tabel logging menyimpan informasi mengenai seluruh request yang dilakukan oleh user ke database SOAP, sedangkan tabel subscription menyimpan informasi mengenai siapa saja pengguna yang sudah melakukan request untuk upgrade ke akun premium_accounts
 
 ## Daftar endpoint
 
