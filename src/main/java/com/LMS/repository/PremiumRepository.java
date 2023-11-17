@@ -29,9 +29,9 @@ public class PremiumRepository extends  Repository{
         }
     }
 
-    public String upgrade(int user_id){
+    public String upgrade(int user_id, String username){
         try{
-            String query = "INSERT INTO premium_accounts(user_id,status) VALUES(" + user_id + ",'WAITING')";
+            String query = "INSERT INTO premium_accounts(user_id,status,username) VALUES(" + user_id + ",'WAITING', '" + username + "')";
             this.stmt.executeUpdate(query);
             return "Successfully request for premium status";
         }catch (Exception e){

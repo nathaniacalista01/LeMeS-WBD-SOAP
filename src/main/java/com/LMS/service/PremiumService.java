@@ -33,10 +33,10 @@ public class PremiumService {
         }
     }
     @WebMethod
-    public String upgrade(@WebParam(name = "user_id") int user_id){
+    public String upgrade(@WebParam(name = "user_id") int user_id, @WebParam(name="username")String username){
         try{
             LoggingMiddleware middleware = new LoggingMiddleware(ws.getMessageContext(),"User has requested for premium account", "upgrade");
-            return premiumRepository.upgrade(user_id);
+            return premiumRepository.upgrade(user_id,username);
         }catch (Exception e){
             return "API EXCEPTION";
         }
